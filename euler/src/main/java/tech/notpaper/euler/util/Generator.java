@@ -1,47 +1,67 @@
 package tech.notpaper.euler.util;
 
 import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
 
-public abstract class Generator<T> implements Iterable<T> {
+public class Generator<F extends GeneratorCallback<T>, T> implements Iterable<T> {
 	
-	private T nextVal;
-	private boolean waiting = false;
+	private F callback;
+	private long limit = Long.MAX_VALUE;
+	
+	public Generator(F callback) {
+		this.callback = callback;
+	}
+	
+	public Generator(F callback, int limit) {
+		this(callback);
+		this.limit = limit;
+	}
+	
+	public Generator(F callback, long limit) {
+		this(callback);
+		this.limit = limit;
+	}
 
 	public Iterator<T> iterator() {
-		this.go();
-		return new GeneratorIterator<T>(this);
+		return new GeneratorIterator<F>();
 	}
 	
-	private class GeneratorIterator<F> implements Iterator<F> {
+	private class GeneratorIterator<Z extends GeneratorCallback<T>> implements Iterator<T> {
 		
-		private Generator<F> generator;
+		private Thread thread;
+		private long count = 0L;
 		
-		public GeneratorIterator(Generator<F> generator) {
-			this.generator = generator;
+		public GeneratorIterator() {
+			thread = new Thread(callback, "test_gen");
+			thread.start();
 		}
 
+		@Override
 		public boolean hasNext() {
-			return generator.hasNext();
+			return count < limit;
 		}
 
-		@SuppressWarnings("unchecked")
-		public F next() {
-			waiting = false;
-			return (F) nextVal;
+		@Override
+		public T next() {
+			//wait for a value to be ready
+			try {
+				callback.activeSignal.await();
+			} catch (InterruptedException e) { } // swallow
+			
+			//count by 1
+			count++;
+			
+			//set value aside
+			T value = callback.curValue;
+			
+			//reset activeSignal, assuming callback is busy
+			callback.activeSignal = new CountDownLatch(1);
+			
+			//tell callback to stop waiting
+			callback.waitSignal.countDown();
+			
+			//return the value fetched
+			return (T) value;
 		}
-		
 	}
-	
-	public boolean hasNext() {
-		return true;
-	}
-	
-	protected synchronized final void yield(T value) throws InterruptedException {
-		nextVal = value;
-		while(waiting) {
-			wait();
-		}
-	}
-	
-	protected abstract void go();
 }

@@ -29,7 +29,7 @@ public class TestEuler {
 		//nothing for now
 	}
 	
-	@Test
+	//@Test
 	public void test1() {
 		assertEquals(233168, Euler1.sumOfMultiplesBelow(3, 5, 1000));
 	}

@@ -17,7 +17,7 @@ public class TestEulerLogger {
 	public static Logger getLogger() {
 		if (me == null) {
 			me = Logger.getLogger(logname);
-			me.setLevel(Level.ALL);
+			me.setLevel(Level.INFO);
 		}
 		
 		return me;

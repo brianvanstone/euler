@@ -1,4 +1,4 @@
-package tech.notpaper.euler.util.primes;
+package tech.notpaper.euler.util.math;
 
 import java.math.BigInteger;
 import java.util.concurrent.ThreadLocalRandom;
@@ -90,6 +90,14 @@ public class PrimeUtils {
 		
 		public static boolean isPrime(BigInteger n) throws OperationNotSupportedException {
 			throw new OperationNotSupportedException("support coming soon!");
+		}
+	}
+	
+	public static class PollardRho {
+		
+		public static long primeFactorOf(long n) {
+			
+			return 0L;
 		}
 	}
 }

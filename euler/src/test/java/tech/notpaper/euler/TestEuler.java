@@ -10,6 +10,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
 
+import tech.notpaper.euler.util.math.PrimeUtils;
+
 public class TestEuler {
 	
 	private Logger logger = TestEulerLogger.getLogger();
@@ -34,8 +36,13 @@ public class TestEuler {
 		assertEquals(233168, Euler1.sumOfMultiplesBelow(3, 5, 1000));
 	}
 	
-	@Test
+	//@Test
 	public void test2() {
 		assertEquals(4613732L, Euler2.sumOfEvenFibsLessThan(4000000L));
+	}
+	
+	@Test
+	public void test3() {
+		System.out.println(PrimeUtils.PollardRho.primeFactorOf(10403));
 	}
 }

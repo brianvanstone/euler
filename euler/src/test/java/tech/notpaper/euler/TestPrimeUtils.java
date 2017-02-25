@@ -1,18 +1,21 @@
 package tech.notpaper.euler;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
-import tech.notpaper.euler.util.primes.PrimeUtils;
+import tech.notpaper.euler.util.math.PrimeUtils;
 
 public class TestPrimeUtils {
 	
 	@Test
 	public void testMillerRabin() {
-		for (int i = 0; i < 100; i++) {
-			if (PrimeUtils.MillerRabin.isPrime(i)) {
-				System.out.println(i);
-			}
-		}
+		assertTrue(PrimeUtils.MillerRabin.isPrime(1500450271));
+	}
+	
+	@Test
+	public void testPollardRho() {
+		assertEquals(101L, PrimeUtils.PollardRho.primeFactorOf(10403));
 	}
 
 }

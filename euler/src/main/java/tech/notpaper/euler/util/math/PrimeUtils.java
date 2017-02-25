@@ -44,7 +44,7 @@ public class PrimeUtils {
 			
 			ThreadLocalRandom rand = ThreadLocalRandom.current();
 			
-			int k = 30;
+			int k = 1000000;
 			while(k > 0) {
 				k -= 1;
 				long a = rand.nextLong(2, n-1);
@@ -76,18 +76,6 @@ public class PrimeUtils {
 			return true;
 		}
 		
-		/**
-		 * Implementation of the Miller-Rabin primality test.
-		 * See <a href="https://en.wikipedia.org/wiki/Miller%E2%80%93
-		 * Rabin_primality_test#Computational_complexity">this page</a>
-		 * for more information.
-		 * @param n the number to be tested
-		 * @return true if the number is probably prime, false otherwise
-		 */
-		public static boolean isPrime(int n) {
-			return isPrime((long) n);
-		}
-		
 		public static boolean isPrime(BigInteger n) throws OperationNotSupportedException {
 			throw new OperationNotSupportedException("support coming soon!");
 		}
@@ -96,8 +84,19 @@ public class PrimeUtils {
 	public static class PollardRho {
 		
 		public static long primeFactorOf(long n) {
+			long xFixed = 2, cycleSize = 2, x = 2, factor = 1;
 			
-			return 0L;
+			while (factor == 1) {
+				for (int count = 1; count <= cycleSize && factor <= 1; count++) {
+					x = (x * x + 1) % n;
+					factor = NumberUtils.gcd(x - xFixed, n);
+				}
+
+				cycleSize *= 2;
+				xFixed = x;
+			}
+			
+			return factor;
 		}
 	}
 }

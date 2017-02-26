@@ -10,14 +10,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
 
+import tech.notpaper.euler.logging.EulerLogHook;
 import tech.notpaper.euler.util.math.PrimeUtils;
 
 public class TestEuler {
 	
-	private Logger logger = TestEulerLogger.getLogger();
+	private Logger logger = EulerLogHook.getLogger();
 	
 	@Rule
-	public TestWatcher logHook = new TestEulerLogger.EulerLogHook();
+	public TestWatcher logHook = new EulerLogHook();
 	
 	public TestEuler() { }
 	

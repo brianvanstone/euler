@@ -1,4 +1,4 @@
-package tech.notpaper.euler;
+package tech.notpaper.euler.util;
 
 import static org.junit.Assert.assertEquals;
 

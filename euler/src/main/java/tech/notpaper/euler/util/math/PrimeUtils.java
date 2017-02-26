@@ -20,47 +20,63 @@ public class PrimeUtils {
 		 */
 		public static boolean isPrime(long n) {
 			
+			// n < 1 is not prime
 			if (n <= 1) {
 				return false;
 			}
 			
+			// 2 and 3 are prime
 			if (n <= 3) {
 				return true;
 			}
 			
+			// all other evens are not prime
 			if (n % 2 == 0) {
 				return false;
 			}
 			
+			// now n is odd and n > 3
+			//  proceed with Miller Rabin primality test
 			
+			// represent n-1 as d2^r with d odd by factoring powers of 2 
 			long d = n - 1;
-			long r = 0L;
-			while(d % 2 == 0) {
-				d = d / 2L;
-				r += 1L;
+			int r = 0;
+			while(d % 2L == 0) {
+				d /= 2L;
+				r++;
 			}
 			
+			// assert that the values we found hold true for d2^r == n-1
 			assertEquals((long) Math.pow(2, r)*d, n-1);
 			
 			ThreadLocalRandom rand = ThreadLocalRandom.current();
 			
-			int k = 1000000;
-			while(k > 0) {
-				k -= 1;
+			// k times
+			for (int k = 0; k < 1000; k++) {
+				// pick a random integer a in the range [2, n − 2]
 				long a = rand.nextLong(2, n-1);
+				
+				// x = a^d mod n
 				long x = (long )Math.pow(a, d) % n;
+				
 				if (x == 1 || x == n-1) {
 					continue;
 				}
 				
 				boolean cont = false;
-				for(int _ = 0; _ < r; _++) {
+				// r-1 times
+				for(int rt = 0; rt < r-1; rt++) {
+					
+					// x = x^2 mod n
 					x = (long)Math.pow(x, 2) % n;
+					
 					if (x == 1) {
+						// composite number
 						return false;
 					}
 					
 					if (x == n-1) {
+						// continue outer loop (k loop)
 						cont = true;
 						break;
 					}
@@ -69,10 +85,10 @@ public class PrimeUtils {
 				if (cont) {
 					continue;
 				}
-				
+				// composite number
 				return false;
 			}
-			
+			// probably prime, depending on k
 			return true;
 		}
 		
@@ -84,6 +100,10 @@ public class PrimeUtils {
 	public static class PollardRho {
 		
 		public static long primeFactorOf(long n) {
+			if (n < 2) {
+				return -1;
+			}
+			
 			long xFixed = 2, cycleSize = 2, x = 2, factor = 1;
 			
 			while (factor == 1) {

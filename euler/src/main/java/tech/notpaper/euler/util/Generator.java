@@ -12,11 +12,6 @@ public class Generator<F extends GeneratorCallback<T>, T> implements Iterable<T>
 		this.callback = callback;
 	}
 	
-	public Generator(F callback, int limit) {
-		this(callback);
-		this.limit = limit;
-	}
-	
 	public Generator(F callback, long limit) {
 		this(callback);
 		this.limit = limit;

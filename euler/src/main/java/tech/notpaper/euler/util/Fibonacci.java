@@ -1,47 +1,27 @@
 package tech.notpaper.euler.util;
 
-import java.util.Iterator;
-
-public class Fibonacci implements Iterable<Long> {
+public class Fibonacci extends Generator<GeneratorCallback<Long>, Long> {
 	
-	private long limit;
-	
-	/**
-	 * Just like normal Fibonacci iteration, but will be
-	 * empty when the limit is reached
-	 * @param limit
-	 */
-	public Fibonacci(long limit) {
-		this.limit = limit;
-	}
-	
-	/**
-	 * Yields numbers in the fibonacci sequence. Will stop returning values when
-	 * the inherent limits of {@link Long} are encountered
-	 */
 	public Fibonacci() {
-		this(Long.MAX_VALUE);
+		super(new FibGen());
+	}
+	
+	public Fibonacci(long limit) {
+		super(new FibGen(), limit);
 	}
 
-	public Iterator<Long> iterator() {
-		return new FibonacciIterator();
-	}
-
-	private class FibonacciIterator implements Iterator<Long> {
+	public static class FibGen extends GeneratorCallback<Long> {
+		private long lastOne = 1L;
+		private long lastTwo = 0L;
 		
-		private long lastOne = 0;
-		private long lastTwo = 1;
-
-		public boolean hasNext() {
-			return lastOne + lastTwo < limit;
-		}
-
-		public Long next() {
-			long result = lastOne + lastTwo;
-			lastOne = lastTwo;
-			lastTwo = result;
-			
-			return result;		
+		@Override
+		public void go() throws InterruptedException {
+			while(true) {
+				long val = lastOne + lastTwo;
+				yield(val);
+				lastOne = lastTwo;
+				lastTwo = val;
+			}
 		}
 	}
 }

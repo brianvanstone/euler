@@ -16,6 +16,10 @@ public class Fibonacci extends Generator<GeneratorCallback<Long>, Long> {
 		
 		@Override
 		public void go() throws InterruptedException {
+			//yield 0 for first term
+			yield(0L);
+			
+			//calculate all subsequent terms
 			while(true) {
 				long val = lastOne + lastTwo;
 				yield(val);

@@ -1,11 +1,16 @@
 package tech.notpaper.euler.util.math;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.Assert.assertEquals;
 
 import javax.naming.OperationNotSupportedException;
+
+import tech.notpaper.euler.util.Generator;
+import tech.notpaper.euler.util.GeneratorCallback;
 
 public class PrimeUtils {
 	//TODO These implementations need work
@@ -119,6 +124,47 @@ public class PrimeUtils {
 			}
 			
 			return factor;
+		}
+	}
+	
+	
+	/**
+	 * Provides primes generated according to the Sieve of Erastosthenes. See
+	 * <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes#Algorithm_and_variants">
+	 * this link</a> for more information
+	 *
+	 */
+	public static class SieveOfEratosthenes extends Generator<GeneratorCallback<Long>, Long> {
+		
+		public SieveOfEratosthenes() {
+			super(new PrimeGen(Long.MAX_VALUE), Long.MAX_VALUE);
+		}
+		
+		public SieveOfEratosthenes(long limit) {
+			super(new PrimeGen(limit), limit);
+		}
+		
+		private static class PrimeGen extends GeneratorCallback<Long> {
+			private long limit;
+			
+			public PrimeGen(long limit) {
+				this.limit = limit;
+			}
+
+			@Override
+			public void go() throws InterruptedException {
+				Map<Long, Boolean> A = new HashMap<>();
+				
+				for(long i = 2; i < Math.sqrt(limit); i++) {
+					long iSq = (long) Math.pow(i, 2);
+					if (A.getOrDefault(i, true)) {
+						for (long multiplier = 0, j = iSq; j < limit; j = iSq+(multiplier*i), multiplier++) {
+							A.put(j, false);
+						}
+						yield(i);
+					}
+				}
+			}
 		}
 	}
 }

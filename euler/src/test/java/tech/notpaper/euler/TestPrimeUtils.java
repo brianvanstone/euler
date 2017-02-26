@@ -8,7 +8,7 @@ import tech.notpaper.euler.util.math.PrimeUtils;
 
 public class TestPrimeUtils {
 	
-	@Test
+	//@Test
 	public void testMillerRabin() {
 		//count primes
 		
@@ -22,9 +22,22 @@ public class TestPrimeUtils {
 		assertEquals(168, j);
 	}
 	
-	@Test
+	//@Test
 	public void testPollardRho() {
 		
+	}
+	
+	@Test
+	public void testEratosthenes() {
+		PrimeUtils.SieveOfEratosthenes primes = new PrimeUtils.SieveOfEratosthenes(100);
+		
+		int i = 0;
+		for(long prime : primes) {
+			i++;
+			System.out.println(prime);
+		}
+		
+		assertEquals(168, i);
 	}
 
 }

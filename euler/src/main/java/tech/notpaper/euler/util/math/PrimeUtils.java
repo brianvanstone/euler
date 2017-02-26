@@ -8,6 +8,8 @@ import static org.junit.Assert.assertEquals;
 import javax.naming.OperationNotSupportedException;
 
 public class PrimeUtils {
+	//TODO These implementations need work
+	
 	
 	public static class MillerRabin {
 		/**

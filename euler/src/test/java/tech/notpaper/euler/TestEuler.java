@@ -43,6 +43,7 @@ public class TestEuler {
 	
 	@Test
 	public void test3() {
-		System.out.println(PrimeUtils.PollardRho.primeFactorOf(10403));
+		//System.out.println(Euler3.largestPrimeFactorOf(600851475143L));
+		System.out.println(PrimeUtils.PollardRho.primeFactorOf(600851475143L));
 	}
 }

@@ -8,12 +8,20 @@ public abstract class GeneratorCallback<T> implements Runnable {
 	CountDownLatch activeSignal = new CountDownLatch(1);
 	CountDownLatch waitSignal = new CountDownLatch(1);
 	
+	@Override
 	public final void run() {
 		try {
 			this.go();
 		} catch (InterruptedException e) { } // swallow
 	}
 	
+	/**
+	 * Implementations of {@link GeneratorCallback} should invoke
+	 * this method from within {@link GeneratorCallback#go()} in
+	 * order to present a value to be yielded to the iteration
+	 * @param value
+	 * @throws InterruptedException
+	 */
 	public final void yield(T value) throws InterruptedException {
 		//update the value
 		curValue = value;

@@ -33,7 +33,7 @@ public class Generator<F extends GeneratorCallback<T>, T> implements Iterable<T>
 
 		@Override
 		public boolean hasNext() {
-			return count < limit;
+			return count < limit && thread.isAlive();
 		}
 
 		@Override
